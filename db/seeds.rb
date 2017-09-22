@@ -10,7 +10,7 @@ users = User.all
 20.times do
    Wiki.create!(
        title: Faker::FamilyGuy.quote,
-       body: Faker::RickAndMorty.quote,
+       body: Faker::RickAndMorty.quote + Faker::RickAndMorty.quote,
        private: false,
        user_id: users.sample.id
        ) 
