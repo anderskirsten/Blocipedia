@@ -21,11 +21,11 @@ class ChargesController < ApplicationController
       )
       
     #create the Stripe charge object
-    charge = Stripe::Charge.create(
+    @stripe_charge = Stripe::Charge.create(
       customer: customer.id, #note this is different than your app's user.id/user_id
       amount: @amount,
       description: "Premium Membership: #{current_user.email}",
-      currency: 'usd'
+      currency: 'usd',
       )
     
     if flash[:error].present?
@@ -34,7 +34,7 @@ class ChargesController < ApplicationController
       redirect_to new_charge_path
     else
       current_user.role = 'premium'
-      current_user.charge_id = charge.id
+      current_user.charge_id = @stripe_charge.id
       current_user.save!
     
       flash[:notice] = "Thanks for upgrading your account, #{current_user.email}!"
