@@ -4,15 +4,19 @@ Rails.application.routes.draw do
   
   resources :wikis
   
+  resources :wikis do
+    resources :collaborators, only: [:new, :create, :destroy]
+  end
+  
   resources :charges, only: [:new, :create]
   
   resources :downgrade, only: [:create]
   
-  get 'about' => 'welcome#about'
-
-  root 'welcome#index'
-  
   authenticated :user do
     root 'wikis#index', as: :authenticated_root
   end
+  
+  get 'about' => 'welcome#about'
+
+  root 'welcome#index'
 end

@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
-  has_many :wikis
+  has_many :wikis, dependent: :destroy
+  has_many :collaborators, dependent: :destroy
   
   after_initialize { self.role ||= :standard }
   
