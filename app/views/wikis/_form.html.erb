@@ -1,22 +1,30 @@
-<h4>Use <%= link_to "Markdown", "https://en.wikipedia.org/wiki/Markdown"%> syntax to create and edit wikis.</h4>
+<div class="row col-md-12">
+    <h4>Use <%= link_to "Markdown", "https://en.wikipedia.org/wiki/Markdown"%> syntax to create and edit wikis.</h4>
 
-<%= form_for wiki do |f| %>
-    <div class="form-group">
-        <%= f.label :title %>
-        <%= f.text_field :title, class: 'form-control', placeholder: "Enter wiki title" %>
-    </div>
-    <div class="form-group">
-        <%= f.label :body %>
-        <%= f.text_area :body, rows: 8, class: 'form-control', placeholder: "Enter wiki body" %>
-    </div>
-    <% if current_user.admin? || current_user.premium? %>
+    <%= form_for wiki do |f| %>
         <div class="form-group">
-            <%= f.label :private, class: 'checkbox' do %>
-                <%= f.check_box :private %>Private Wiki
-            <% end %>
+            <%= f.label :title %>
+            <%= f.text_field :title, class: 'form-control', placeholder: "Enter wiki title" %>
+        </div>
+        <div class="form-group">
+            <%= f.label :body %>
+            <%= f.text_area :body, rows: 8, class: 'form-control', placeholder: "Enter wiki body" %>
+        </div>
+        <% if current_user.admin? || current_user.premium? %>
+            <div class="form-group">
+                <%= f.label :private, class: 'checkbox' do %>
+                    <%= f.check_box :private %>Private Wiki
+                <% end %>
+            </div>
+        <% end %>
+        <div class="form-group">
+            <%= f.submit "Save", class: 'btn btn-success' %>
         </div>
     <% end %>
-    <div class="form-group">
-        <%= f.submit "Save", class: 'btn btn-success' %>
-    </div>
-<% end %>
+</div>
+<div class="col-md-12">
+    <h2>Preview</h2>
+    <div class="form-group wiki-preview"></div>
+</div>
+
+

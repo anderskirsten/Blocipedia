@@ -6,45 +6,19 @@ class WikiPolicy < ApplicationPolicy
             @user = user
             @scope = scope
         end
-        
-        ## REFACTOR - NOT WORKING
-#        def resolve
-#            if user.role == 'admin'
-#                scope.all
-#                
-#            elsif user.role == 'premium'
-#                scope = wiki.private == false + wiki.user == user + wiki.collaborators.pluck(:user_id).include?(user.id)
-#                
-#            else #conditions for 'standard' user
-#                scope = wiki.private == false + wiki.collaborators.pluck(:user_id).include?(user.id)
-#            end
-#        end
-        
+
         def resolve
-            wikis = []
-            
-            if user.role == 'admin'
-                wikis = scope.all
+            if user.admin?
+                scope.all
                 
-           elsif user.role == 'premium'
-                all_wikis = scope.all
-                
-                all_wikis.each do |wiki|
-                    if wiki.private == false || wiki.user == user || wiki.collaborators.pluck(:user_id).include?(user.id)
-                        wikis << wiki
-                    end
-                end
+            elsif user.premium?
+                scope.where(private: true, user_id: user.id) | scope.where(private: false) | user.wiki_collaborations
                 
             else #conditions for 'standard' user
-                all_wikis = scope.all
-                
-                all_wikis.each do |wiki|
-                    if wiki.private == false || wiki.collaborators.pluck(:user_id).include?(user.id)
-                        wikis << wiki
-                    end
-                end
+                scope.where(private: false) | user.wiki_collaborations
             end
-            wikis
         end
+        
+       
     end
 end
